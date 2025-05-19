@@ -9,10 +9,9 @@ import google.generativeai as genai
 import typing_extensions as typing
 import time
 
-
+genai.configure(api_key="your_key")
 
 def generate_label(model_name, query:list, pdf_path, output_dir):
-    genai.configure(api_key="AIzaSyC3hUut2AKGPAsRE7MN-s0LecjOEdg2bcg")
     model = genai.GenerativeModel(model_name)
     sample_pdf = genai.upload_file(pdf_path)
     output_file = os.path.join(output_dir, "api_"+ pdf_path.split('\\')[-1][:-4]+"_QA.jsonl")
