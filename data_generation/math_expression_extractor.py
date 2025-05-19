@@ -10,7 +10,7 @@ import typing_extensions as typing
 import time
 
 
-genai.configure(api_key="AIzaSyC3hUut2AKGPAsRE7MN-s0LecjOEdg2bcg")
+genai.configure(api_key="your_key")
 
 def extract_formula(model_name, pdf_path, output_dir):
     model = genai.GenerativeModel(model_name)
