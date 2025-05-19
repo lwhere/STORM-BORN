@@ -10,7 +10,7 @@
 ├── __pycache__/                    # Python 缓存目录
 ├── __init__.py                     # 包初始化文件
 ├── answer_retriever.py             # 根据 query 调用接口检索并生成答案标签
-<！--├── clean_data.py                   # （预留）清洗、预处理中间数据脚本-->
+<!--├── clean_data.py                   # （预留）清洗、预处理中间数据脚本-->
 ├── context_collector.py            # 收集每个问题的上下文信息
 ├── filter.py                       # 对最终 JSONL 结果进行过滤、重命名
 ├── generate_v1.py                  # （预留）旧版或实验性 query 生成脚本
