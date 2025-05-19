@@ -18,7 +18,7 @@ def call_deepseek_model(prompt, data, model_name):
     try:
         client = OpenAI(
             # #将这里换成你在aihubmix api keys拿到的密钥
-            api_key="sk-ORipmtAUfrC6oP0z146f73Df2b9748558090Aa366b491046",
+            api_key="your_key",
             # 这里将官方的接口访问地址，替换成aihubmix的入口地址
             base_url="https://api.aihubmix.com/v1"
         )
