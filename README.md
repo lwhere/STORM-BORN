@@ -8,6 +8,10 @@ This dataset can be used to fine-tune LLMs to enhance their reasoning generaliza
 
 It can also serve as a benchmark for evaluating models’ reasoning abilities. Because the reasoning process is difficult to evaluate automatically, we have designed a multiple-choice format that transforms the generation of correct answers into a selection task for evaluation.
 
+![Case Study](case_study.png)     <!-- 或者把文件改名为 case_study.jpg -->
+Case Study
+![Methods](methods.png)
+Pipeline Methods
 ---
 
 ## 📂 Repository Structure
