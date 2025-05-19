@@ -63,7 +63,7 @@ python pipeline.py \
 3. **生成标签** – 调用 `answer_retriever.generate_label`，输出 `*_QA.jsonl`
 4. **收集上下文** – 调用 `context_collector.context_collect`，输出 `*_context.jsonl`
 5. **修正问题** – 调用 `question_refiner.refine`，输出 `*_refined.jsonl`
-6. **过滤数据** – 调用 `filter.filter_jsonl`，对结果中符合条件的条目进行筛选，最终写入 `final_*.jsonl` 或自定义文件名
+6. **过滤数据** – 调用 `filter.filter_jsonl`，对结果中符合条件的条目进行筛选，最终写入 `final_*.jsonl`
 
 ---
 
