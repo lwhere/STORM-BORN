@@ -9,8 +9,10 @@ import google.generativeai as genai
 import typing_extensions as typing
 import time
 
+
+genai.configure(api_key="your_key")
+
 def call_LLM_model(prompt, pdf_path, data):
-    genai.configure(api_key="AIzaSyC3hUut2AKGPAsRE7MN-s0LecjOEdg2bcg")
     model = genai.GenerativeModel("gemini-2.0-flash-exp")
     # model3 = genai.GenerativeModel("gemini-2.0-flash-thinking-exp")
     sample_pdf = genai.upload_file(pdf_path)
