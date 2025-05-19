@@ -1,4 +1,4 @@
-# Pipeline 项目
+# Pipeline of Data_Generation
 
 本项目提供一套从 PDF 中抽取数学公式、生成查询、检索答案、收集上下文、优化问题再到数据过滤的全流程脚本。z整体入口脚本为 `pipeline.py`，依赖同目录下的多个模块完成各个子任务。
 
