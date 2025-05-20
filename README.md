@@ -1,16 +1,14 @@
-# STORM-BORN
+# STORM-BORN: A Challenging Mathematical Derivations Dataset
 
 **STORM-BORN** is a challenging benchmark of human‐like mathematical derivations designed to push the reasoning capabilities of large language models (LLMs). 
+
+![Case Study](./train/case_study.png)
 
 Unlike conventional numerical or formal proofs, STORM-BORN focuses on dense, approximation-rich derivations with heuristic cues, curated from the latest academic papers and vetted by human mathematicians via a multi‐agent, human-in-the-loop framework.
 
 This dataset can be used to fine-tune LLMs to enhance their reasoning generalization on other datasets.
 
 It can also serve as a benchmark for evaluating models’ reasoning abilities. Because the reasoning process is difficult to evaluate automatically, we have designed a multiple-choice format that transforms the generation of correct answers into a selection task for evaluation.
-
-## Case Study
-
-![Case Study](./train/case_study.png)
 
 ## Pipeline Methods
 
