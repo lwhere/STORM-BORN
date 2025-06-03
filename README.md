@@ -1,5 +1,11 @@
 # STORM-BORN: A Challenging Mathematical Derivations Dataset
 
+<div align="center">
+<p align="center" style="font-size: larger;">
+<strong> [ACL 2025] </strong> <a href="https://arxiv.org/abs/2506.01531"> STORM-BORN: A Challenging Mathematical Derivations Dataset Curated via a Human-in-the-Loop Multi-Agent Framework</a>
+</p>
+</div>
+
 **STORM-BORN** is a challenging benchmark of human‐like mathematical derivations designed to push the reasoning capabilities of large language models (LLMs). 
 
 ![Case Study](./train/case_study.png)
