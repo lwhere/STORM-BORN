@@ -26,36 +26,36 @@ It can also serve as a benchmark for evaluating models’ reasoning abilities. B
 ```markdown
 
 ├── data
-│   └── storm_born_top100.jsonl                      # 100 most difficult problems (from 2,000 samples)
-|   └── storm_born_top100_choice.jsonl                 # multi_choice data converted from storm-born
+│   ├── storm-born.jsonl               # full dataset
+│   ├── storm-born-choice.jsonl        # multiple-choice format
+│   ├── storm_born_train.jsonl         # training split
+│   ├── storm_born_test.jsonl          # test split
+│   ├── storm_born_abcd.jsonl          # multiple-choice with four options
+│   └── storm_born_test_abcd.jsonl     # test set in multiple-choice format
 │
 ├── data_generation
 │   ├── clean_data.py              # post-process raw model outputs
-│   └── generate_v1.py             # synthesize initial derivations via multi-agent pipeline
+│   ├── generate_v1.py             # synthesize initial derivations
+│   ├── pipeline.py                # end-to-end data generation
+│   └── ...                        # additional helper scripts
 │
 ├── data_evaluation
-│   ├── benchmark_evaluation
-|   |   └── multiple_choice_eval.py    # eval LLMs on multi_choice data
-│   │   └── llm_as_judge.py            # evaluate STORM-BORN with an LLM-as-Judge
-│   │
-│   ├── i.i.d_evaluation
-│   │   └── eval_iid.py            # downstream i.i.d. task evaluation script
-│   │
-│   └── o.o.d_evaluation
-│       └── eval_ood.py            # downstream o.o.d. task evaluation script
+│   └── benchmark_evaluation
+│       ├── llm_as_judge.py        # evaluate STORM-BORN with an LLM-as-Judge
+│       └── multiple_choice_eval.py    # eval LLMs on choice data
 │
 └── train
-    └── axolotl                    # submodule: Axolotl SFT framework
+    ├── case_study.png
+    └── methods.png
 ```
 
 ---
 
-\todo{need to change}
 ## 🚀 Installation
 
-1. **Clone with submodules**  
+1. **Clone the repository**
    ```bash
-   git clone --recurse-submodules <repo_url> && cd STORM-BORN
+   git clone <repo_url> && cd STORM-BORN
    ```
 
 2. **Create a virtual environment**  
@@ -63,17 +63,12 @@ It can also serve as a benchmark for evaluating models’ reasoning abilities. B
    python3 -m venv .venv && source .venv/bin/activate
    ```
 
-3. **Install core dependencies**  
+3. **Install dependencies**
    ```bash
-   pip install -r requirements.txt
+   pip install google-generativeai openai typing-extensions
    ```
-
-4. **Install Axolotl (for SFT)**  
-   ```bash
-   cd train/axolotl
-   pip install -e .
-   cd ../..
-   ```
+4. *(Optional)* **Install Axolotl for SFT**
+   Follow the instructions at [Axolotl](https://github.com/axolotl-ai-cloud/axolotl) if you plan to fine-tune models.
 
 ---
 
@@ -132,36 +127,19 @@ python data_evaluation/benchmark_evaluation/multiple_choice_eval.py \
 ```
 ### 3. Downstream Task Evaluation
 
-After fine-tuning on STORM-BORN, assess on both in-distribution (i.i.d) and out-of-distribution (o.o.d) tasks:
-
-- **i.i.d. evaluation**  
-  ```bash
-  python data_evaluation/i.i.d_evaluation/eval_iid.py \
-    --model_path checkpoints/storm-born-sft \
-    --dataset data/iid_task.jsonl \
-    --output results/iid_results.json
-  ```
-
-- **o.o.d. evaluation**  
-  ```bash
-  python data_evaluation/o.o.d_evaluation/eval_ood.py \
-    --model_path checkpoints/storm-born-sft \
-    --dataset data/ood_task.jsonl \
-    --output results/ood_results.json
-  ```
+After fine-tuning on STORM-BORN, evaluate your model on downstream tasks using your preferred framework.
 
 ---
 
 ## 🤖 Fine-Tuning (SFT)
 
-We leverage the Axolotl framework under `train/axolotl`:
+We fine-tune models with the [Axolotl](https://github.com/axolotl-ai-cloud/axolotl) framework (not included in this repository). A typical command might look like:
 
 ```bash
-cd train/axolotl
 python train.py \
   --model_name_or_path elephantai/llama-13b \
-  --data_path ../../data/storm-born.jsonl \
-  --output_dir ../../checkpoints/storm-born-sft \
+  --data_path data/storm-born.jsonl \
+  --output_dir checkpoints/storm-born-sft \
   --batch_size 4 \
   --epochs 3 \
   --lr 2e-5
@@ -189,4 +167,3 @@ If you use STORM-BORN, please cite:
 ## ⚖️ License
 
 This project is released under the **MIT License**. See [LICENSE](./LICENSE) for details.
-```
