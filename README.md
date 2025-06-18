@@ -1,6 +1,10 @@
 # STORM-BORN: A Challenging Mathematical Derivations Dataset
 
-This repository is anonymized for double-blind review. Links to the paper and citations will be added after review.
+<div align="center">
+<p align="center" style="font-size: larger;">
+<strong> [ACL 2025] </strong> <a href="https://arxiv.org/abs/2506.01531"> STORM-BORN: A Challenging Mathematical Derivations Dataset Curated via a Human-in-the-Loop Multi-Agent Framework</a>
+</p>
+</div>
 
 **STORM-BORN** is a challenging benchmark of human‐like mathematical derivations designed to push the reasoning capabilities of large language models (LLMs). 
 
@@ -143,8 +147,21 @@ python train.py \
 
 
 
-## Citation
-Citation details will be provided after the review process.
+## 📚 Citation
+
+If you use STORM-BORN, please cite:
+
+```bibtex
+
+@inproceedings{liu2025stormborn,
+  title = {{STORM}-{BORN}: A Challenging Mathematical Derivations Dataset Curated via a Human-in-the-Loop Multi-Agent Framework},
+  author = {Liu, Wenhao and Lu, Zhenyi and Hu, Xinyu and Zhang, Jerry and Li, Dailin and Cen, Jiacheng and Cao, Huilin and Wang, Haiteng and Li, Yuhan and Xie, Kun and Li, Dandan and Zhang, Pei and Zhang, Chengbo and Ren, Yuxiang and Ma, Yan and Huang, Xiaohong},
+  booktitle = {The 63rd Annual Meeting of the Association for Computational Linguistics},
+  year = {2025},
+  url = {https://github.com/lwhere/STORM-BORN}
+}
+```
+
 ---
 
 ## ⚖️ License
