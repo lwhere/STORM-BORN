@@ -4,14 +4,12 @@ import time
 import re
 from typing import List, Dict, Any
 
-# 配置OpenAI客户端
 client = openai.OpenAI(
-  api_key="sk-0fa20J1sO7BNlMAV7c558d9790D14a45B1E504Cf69DeF043",
-    base_url="https://aihubmix.com/v1"  # 修改为您的LLM服务商的URL
+  api_key="sk-xxxxxxx",
+    base_url="https://aihubmix.com/v1"  
 )
 
 def read_jsonl(file_path: str) -> List[Dict[str, Any]]:
-    """读取JSONL文件"""
     data = []
     with open(file_path, 'r', encoding='utf-8') as f:
         for line in f:
@@ -20,30 +18,24 @@ def read_jsonl(file_path: str) -> List[Dict[str, Any]]:
     return data
 
 def write_jsonl(data: List[Dict[str, Any]], file_path: str):
-    """写入JSONL文件"""
     with open(file_path, 'w', encoding='utf-8') as f:
         for item in data:
             json.dump(item, f, ensure_ascii=False)
             f.write('\n')
 
 def append_to_jsonl(item: Dict[str, Any], file_path: str):
-    """追加单条数据到JSONL文件"""
     with open(file_path, 'a', encoding='utf-8') as f:
         json.dump(item, f, ensure_ascii=False)
         f.write('\n')
 
 def apply_mask_optimization(sub_label: str, target_equation: str) -> str:
-    """应用mask优化，将指定的equation替换为[Missing Equation]"""
-    # 清理target_equation，去掉<equation>标签
     target_equation_clean = target_equation.replace("<equation>", "").replace("</equation>", "").strip()
     full_equation_tag = f"<equation>{target_equation_clean}</equation>"
     
-    # 替换为[Missing Equation]
     optimized_sub_label = sub_label.replace(full_equation_tag, "[Missing Equation]", 1)
     return optimized_sub_label
 
 def generate_missing_equation(question: str, blank_answer: str) -> str:
-    """让LLM生成missing equation"""
     
     prompt = f"""You are a mathematical assistant. Given a mathematical question and a partially completed derivation with a missing equation, you need to fill in the missing equation.
 
@@ -72,9 +64,7 @@ Your response should be just the LaTeX equation, nothing else."""
         return ""
 
 def check_equivalence(generated_eq: str, ground_truth: str) -> Dict[str, Any]:
-    """用LLM判断两个公式是否等价"""
     
-    # 清理ground_truth，去掉<equation>标签
     ground_truth_clean = ground_truth.replace("<equation>", "").replace("</equation>", "").strip()
     
     prompt = f"""You are a mathematical expert. Your task is to determine if two mathematical equations are mathematically equivalent.
@@ -121,14 +111,12 @@ No explanation needed, just the classification."""
         return {"equivalent": None, "reason": f"检查等价性时出错: {e}"}
 
 def process_single_item_with_optimization(item: Dict[str, Any], index: int) -> Dict[str, Any]:
-    """处理单个数据项，包含实时mask优化"""
     print(f"\n处理第 {index + 1} 题...")
     
     question = item["question"]
     blank_answer = item["blank_answer"]
     ground_truth = item["ground_truth"]
     
-    # 第一步：生成missing equation
     print("正在生成missing equation...")
     generated_equation = generate_missing_equation(question, blank_answer)
     
@@ -138,19 +126,14 @@ def process_single_item_with_optimization(item: Dict[str, Any], index: int) -> D
     
     print(f"生成的方程: {generated_equation}")
     
-    # 第二步：检查等价性
     print("正在检查等价性...")
     equivalence_result = check_equivalence(generated_equation, ground_truth)
     
-    # 第三步：实时mask优化
     print("正在进行mask优化...")
-    # 从blank_answer重建原始sub_label（去掉[Missing Equation]并加上ground_truth）
     original_sub_label = blank_answer.replace("[Missing Equation]", ground_truth)
     
-    # 应用mask优化，生成新的blank_answer
     optimized_blank_answer = apply_mask_optimization(original_sub_label, ground_truth)
     
-    # 记录结果
     result = {
         "question_id": index + 1,
         "question": question,
@@ -164,18 +147,16 @@ def process_single_item_with_optimization(item: Dict[str, Any], index: int) -> D
     
     # 统计
     if equivalence_result["equivalent"]:
-        print("✓ 正确")
+        print("正确")
     elif equivalence_result["equivalent"] is False:
-        print("✗ 错误")
+        print("错误")
     else:
-        print("? 无法判断")
+        print("无法判断")
     
     return result
 
 def evaluate_fill_blanks_with_realtime_optimization():
-    """主评估函数 - 带实时mask优化"""
     
-    # 读取数据
     data = read_jsonl("fill_in_the_blanks_data.jsonl")
     print(f"读取到 {len(data)} 条填空题数据")
     
@@ -183,18 +164,15 @@ def evaluate_fill_blanks_with_realtime_optimization():
     correct_count = 0
     total_count = 0
     
-    # 实时处理结果文件
     evaluation_output_file = "evaluation_with_optimization.jsonl"
     optimized_data_file = "optimized_data_realtime.jsonl"
     
-    # 清空输出文件
     with open(evaluation_output_file, 'w', encoding='utf-8') as f:
         pass
     with open(optimized_data_file, 'w', encoding='utf-8') as f:
         pass
     
     for i, item in enumerate(data):
-        # 处理单个数据项（包含实时优化）
         result = process_single_item_with_optimization(item, i)
         
         if result is None:
@@ -206,11 +184,9 @@ def evaluate_fill_blanks_with_realtime_optimization():
         if result["equivalence_result"]["equivalent"]:
             correct_count += 1
         
-        # 实时写入评估结果
         append_to_jsonl(result, evaluation_output_file)
         print(f"已实时保存评估结果到 {evaluation_output_file}")
         
-        # 实时写入优化后的数据（用于下一步处理）
         optimized_item = {
             "question": result["question"],
             "ground_truth": result["ground_truth"],
@@ -220,16 +196,13 @@ def evaluate_fill_blanks_with_realtime_optimization():
         append_to_jsonl(optimized_item, optimized_data_file)
         print(f"已实时保存优化数据到 {optimized_data_file}")
         
-        # 避免请求过快
         time.sleep(1)
     
-    # 输出统计结果
     print(f"\n=== 评估结果 ===")
     print(f"总题数: {total_count}")
     print(f"正确数: {correct_count}")
     print(f"准确率: {correct_count/total_count*100:.2f}%" if total_count > 0 else "准确率: 0%")
     
-    # 保存详细结果
     with open("evaluation_results_detailed.json", "w", encoding="utf-8") as f:
         json.dump({
             "summary": {
@@ -245,14 +218,12 @@ def evaluate_fill_blanks_with_realtime_optimization():
     print(f"实时优化数据已保存到 {optimized_data_file}")
 
 def process_single_item(item: Dict[str, Any], index: int) -> Dict[str, Any]:
-    """处理单个数据项（原始版本，不包含优化）"""
     print(f"\n处理第 {index + 1} 题...")
     
     question = item["question"]
     blank_answer = item["blank_answer"]
     ground_truth = item["ground_truth"]
     
-    # 生成missing equation
     print("正在生成missing equation...")
     generated_equation = generate_missing_equation(question, blank_answer)
     
@@ -262,11 +233,9 @@ def process_single_item(item: Dict[str, Any], index: int) -> Dict[str, Any]:
     
     print(f"生成的方程: {generated_equation}")
     
-    # 检查等价性
     print("正在检查等价性...")
     equivalence_result = check_equivalence(generated_equation, ground_truth)
     
-    # 记录结果
     result = {
         "question_id": index + 1,
         "question": question,
@@ -276,7 +245,6 @@ def process_single_item(item: Dict[str, Any], index: int) -> Dict[str, Any]:
         "equivalence_result": equivalence_result
     }
     
-    # 统计
     if equivalence_result["equivalent"]:
         print("✓ 正确")
     elif equivalence_result["equivalent"] is False:
@@ -287,9 +255,7 @@ def process_single_item(item: Dict[str, Any], index: int) -> Dict[str, Any]:
     return result
 
 def evaluate_fill_blanks():
-    """主评估函数（原始版本）"""
-    
-    # 读取数据
+
     data = read_jsonl("fill_in_the_blanks_data.jsonl")
     print(f"读取到 {len(data)} 条填空题数据")
     
@@ -297,12 +263,10 @@ def evaluate_fill_blanks():
     correct_count = 0
     total_count = 0
     
-    # 实时处理结果文件
     sub_label_output_file = "sub_label_output.jsonl"
     processed_results = []
     
     for i, item in enumerate(data):
-        # 处理单个数据项
         result = process_single_item(item, i)
         
         if result is None:
@@ -314,21 +278,17 @@ def evaluate_fill_blanks():
         if result["equivalence_result"]["equivalent"]:
             correct_count += 1
         
-        # 实时写入处理结果
         processed_results.append(result)
         write_jsonl(processed_results, sub_label_output_file)
         print(f"已实时保存到 {sub_label_output_file}")
         
-        # 避免请求过快
         time.sleep(1)
     
-    # 输出统计结果
     print(f"\n=== 评估结果 ===")
     print(f"总题数: {total_count}")
     print(f"正确数: {correct_count}")
     print(f"准确率: {correct_count/total_count*100:.2f}%" if total_count > 0 else "准确率: 0%")
     
-    # 保存详细结果
     with open("evaluation_results.json", "w", encoding="utf-8") as f:
         json.dump({
             "summary": {
