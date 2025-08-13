@@ -125,7 +125,13 @@ python data_evaluation/benchmark_evaluation/multiple_choice_eval.py \
   --model gpt-4 \
   --output results/benchmark.json
 ```
-### 3. Downstream Task Evaluation
+### 3. Benchmark Evaluation (Filling-Blank-question)
+
+Use LLM to fill in the blanks in fill-in-the-blank questions on STORM-BORN-BLANK:
+```bash
+python data_evaluation/benchmark_evaluation/evaluate_fill_blanks.py
+```
+### 4. Downstream Task Evaluation
 
 After fine-tuning on STORM-BORN, evaluate your model on downstream tasks using your preferred framework.
 
