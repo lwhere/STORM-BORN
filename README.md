@@ -127,7 +127,7 @@ python data_evaluation/benchmark_evaluation/multiple_choice_eval.py \
 ```
 ### 3. Benchmark Evaluation (Filling-Blank-question)
 
-Use LLM to fill in the blanks in fill-in-the-blank questions on STORM-BORN-BLANK:
+Use an LLM to fill in the blanks in fill-in-the-blank questions on STORM-BORN-BLANK:
 ```bash
 python data_evaluation/benchmark_evaluation/evaluate_fill_blanks.py
 ```
